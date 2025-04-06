@@ -154,3 +154,13 @@ def create_review(request, recipe_id):
     else:
         form = ReviewForm()
     return render(request, 'recipes/review_form.html', {'form': form, 'recipe': recipe})
+
+def recipe_list(request):
+    query = request.GET.get('q')
+    if query:
+        recipes = Recipe.objects.filter(
+            Q(title__icontains=query) | Q(ingredients__icontains=query)
+        )
+    else:
+        recipes = Recipe.objects.all()
+    return render(request, 'recipes/recipe_list.html', {'recipes': recipes})
