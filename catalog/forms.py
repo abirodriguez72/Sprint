@@ -34,7 +34,7 @@ class UserLoginForm(forms.Form):
 class RecipeForm(forms.ModelForm):
     class Meta:
         model = Recipe
-        fields = ['title', 'ingredients', 'instructions', 'notes', 'category', 'photo']
+        fields = ['title', 'ingredients', 'instructions', 'notes', 'category', 'photo', 'rating',]
         widgets = {
             'ingredients': forms.Textarea(attrs={
                 'rows': 6,
@@ -52,6 +52,8 @@ class RecipeForm(forms.ModelForm):
                 'placeholder': 'Any additional notes (optional)'
             }),
             'category': forms.CheckboxSelectMultiple(),
+            'rating': forms.Select(attrs={'class': 'form-select'}),
+            'comment': forms.Textarea(attrs={'rows': 3}),
         }
 
     def clean_category(self):
