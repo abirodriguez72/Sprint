@@ -166,3 +166,32 @@ def recipe_list(request):
     else:
         recipes = Recipe.objects.all()
     return render(request, 'recipes/recipe_list.html', {'recipes': recipes})
+    
+def recipe_detail(request, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    reviews = recipe.review_set.all()
+    average = recipe.average_rating()
+
+    if request.user.is_authenticated:
+        existing_review = Review.objects.filter(recipe=recipe, user=request.user).first()
+        if request.method == 'POST' and not existing_review:
+            form = ReviewForm(request.POST)
+            if form.is_valid():
+                review = form.save(commit=False)
+                review.recipe = recipe
+                review.user = request.user
+                review.save()
+                return redirect('recipe_detail', recipe_id=recipe.id)
+        else:
+            form = ReviewForm()
+    else:
+        form = None
+        existing_review = None
+
+    return render(request, 'recipes/recipe_detail.html', {
+        'recipe': recipe,
+        'reviews': reviews,
+        'average_rating': average,
+        'form': form,
+        'existing_review': existing_review,
+    })
