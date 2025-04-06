@@ -1,0 +1,178 @@
+/* General Page Styles */
+body {
+  background-color: #1A0148;
+  color: aliceblue;
+  text-align: inherit;
+  font-family: "Montserrat", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header styling using flexbox */
+.header {
+  background-color: #1A0148;
+  padding: 30px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Create three equal columns in the header */
+.header-left,
+.header-right {
+  width: 25%;
+  text-align: center;
+}
+
+.header-center {
+  width: 50%;
+  text-align: center;
+  color: #CE4D47;
+  font-family: "Forte", cursive;
+  font-size: 5em;
+  font-weight: 550;
+  font-style: italic;
+}
+
+/* Header-specific button styling */
+.header .btn {
+  color: #1A0148;
+  border-style: solid;
+  border-radius: 5px;
+  background-color: #d7ebf6;
+  border-color: aliceblue;
+  padding: 5px 10px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 0.8em;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0;
+}
+
+.header .btn:hover {
+  background-color: #300285;
+  border-style: solid;
+  border-color: #2d0378;
+  color: aliceblue;
+}
+
+/* Headings */
+h1 {
+  color: #CE4D47;
+  text-align: center;
+  font-family: "Brush Script MT", cursive;
+  font-size: 5em;
+  font-weight: 550;
+  font-style: italic;
+  margin: 0;
+  padding: 20px 0;
+}
+
+h2 {
+  color: aliceblue;
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  margin: 20px 0;
+}
+
+h3 {
+  color: #FFFFA5;
+  text-align: justify;
+  font-family: "Source Sans 3", sans-serif;
+  font-weight: 400;
+  margin: 10px 0;
+}
+
+/* Paragraphs */
+p {
+  color: aliceblue;
+  font-family: "Montserrat", sans-serif;
+  margin: 10px 0;
+}
+
+/* Lists */
+ul {
+  color: aliceblue;
+  font-family: "Montserrat", sans-serif;
+  padding-left: 20px;
+}
+
+/* Responsive grid for images */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);  /* Force three columns */
+  gap: 16px;
+  margin: 20px;
+}
+
+.image-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.image-item:hover img {
+  transform: scale(1.05);
+}
+
+/* Overlay with hover links */
+.overlay {
+  position: absolute;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.image-item:hover .overlay {
+  opacity: 1;
+}
+
+.overlay a {
+  color: white;
+  margin: 0 10px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.image-grid img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Custom styling for textareas */
+textarea {
+  font-family: "Montserrat", sans-serif;
+    font-size: 1em;
+    padding: 10px;
+    border: 1px solid aliceblue;
+    border-radius: 4px;
+    line-height: 1.5;
+    background-color: #1A0148;
+}
+
+/* Footer styling */
+.footer {
+  background-color: #300285;
+  color: aliceblue;
+  text-align: center;
+  padding: 20px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 1em;
+  width: 100%;
+}

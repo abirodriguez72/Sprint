@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dainty Batter - Home</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,400;1,100;1,400&family=Source+Sans+3:ital,wght@0,200;0,400;1,200;1,400&display=swap">
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Sign In and Sign Up buttons -->
+        <header class="header">
+            <div class="header-left">
+                <a href="{% url 'login' %}" class="btn">Sign In</a>
+            </div>
+            <div class="header-center">
+                Dainty Batter
+            </div>
+            <div class="header-right">
+                <a href="{% url 'signup' %}" class="btn">Sign Up</a>
+            </div>
+        </header>
+
+        <h2>Recent Recipes</h2>
+        <!-- Image grid: force 3 columns to produce three rows when nine recipes are present -->
+        <div class="image-grid">
+            {% for recipe in recent_recipes|slice:":9" %}
+                <div class="image-item">
+                    {% if recipe.photo %}
+                        <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}">
+                    {% else %}
+                        <img src="{% static 'default_recipe.jpg' %}" alt="{{ recipe.title }}">
+                    {% endif %}
+                    <div class="overlay">
+                        <a href="{% url 'recipe_detail' recipe.recipe_id %}">View Recipe</a>
+                        {% if recipe.user %}
+                            <a href="{% url 'user_detail' recipe.user.user_id %}">View Baker</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p>No recipes found.</p>
+            {% endfor %}
+        </div>
+
+        <h2>Categories</h2>
+        <ul>
+            {% for category in categories %}
+                <li>
+                    <a href="{% url 'category_detail' category.slug %}">{{ category.name }}</a>
+                </li>
+            {% empty %}
+                <li>No categories available.</li>
+            {% endfor %}
+        </ul>
+
+        <p>You have visited this page {{ num_visits }} time{{ num_visits|pluralize }}.</p>
+
+        <!-- Footer -->
+        <footer class="footer">
+            &copy; 2025 Dainty Batter. All rights reserved.
+        </footer>
+    </div>
+</body>
+</html>
