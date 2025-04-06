@@ -26,6 +26,13 @@
     {% endif %}
 
     <h2>Reviews</h2>
+
+    {% if recipe.average_rating %}
+        <p>Average Rating: {{ recipe.average_rating|floatformat:1 }} stars</p>
+    {% else %}
+        <p>No ratings yet.</p>
+    {% endif %}
+
     <ul>
         {% for review in reviews %}
             <li>
@@ -39,6 +46,7 @@
             <li>No reviews yet.</li>
         {% endfor %}
     </ul>
+
 
     <p><a href="{% url 'recipe_list' %}">Back to Recipe List</a></p>
 </body>
