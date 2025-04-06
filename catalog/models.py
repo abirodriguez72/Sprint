@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, AbstractUser
 import uuid
 
 CATEGORY_TYPE_CHOICES = [
@@ -71,27 +71,37 @@ class Category(models.Model):
         super().save(*args, **kwargs)
 
 
-class User(models.Model):
-    """Model representing a user."""
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+import uuid
+from django.urls import reverse
+
+
+class User(AbstractUser):
+    """Model representing a user"""
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    real_name = models.CharField(max_length=100, help_text='Enter your full name')
-    email = models.EmailField(max_length=100, unique=True)
+
     user_name = models.CharField(max_length=100, unique=True)
-    password = models.CharField(max_length=100)  # TODO: Make sure to hash the password!
+    email = models.EmailField(max_length=100, unique=True)
+
+    real_name = models.CharField(max_length=100, help_text='Enter your name')
     bio = models.TextField(blank=True, null=True)
     profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     user_type = models.ForeignKey('UserType', on_delete=models.SET_NULL, null=True, blank=True)
-    # TODO: Optionally add user photos as links to recipes
+
+    username = models.CharField(max_length=100, unique=True)
+
+    USERNAME_FIELD = 'user_name'
+    REQUIRED_FIELDS = ['email', 'real_name']
 
     class Meta:
         ordering = ['user_name']
 
     def get_absolute_url(self):
-        """Returns the URL to access a particular user instance."""
         return reverse('user_detail', args=[str(self.user_id)])
 
     def __str__(self):
-        return f'{self.user_name}, {self.user_id}'
+        return self.user_name
 
 
 class UserType(models.Model):
