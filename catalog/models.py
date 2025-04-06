@@ -172,3 +172,13 @@ class Review(models.Model):
         help_text='Optional comment provided by the user.'
     )
     created_at = models.DateTimeField(auto_now_add=True)
+
+class RecipeNote(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    note = models.TextField()
+    is_public = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - Note on {self.recipe.title}"
