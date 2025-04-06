@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.hashers import make_password
-from .models import User, Recipe, Review
+from .models import User, Recipe, Review, 
+from .models import RecipeNote
 
 class UserProfileCreationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, label="Password")
@@ -73,4 +74,8 @@ class ReviewForm(forms.ModelForm):
             'rating': forms.Select(),  # Django will use the RATING_CHOICES defined in your model
             'comment': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Enter your review here'}),
         }
+class RecipeNoteForm(forms.ModelForm):
+    class Meta:
+        model = RecipeNote
+        fields = ['note', 'is_public']
 
