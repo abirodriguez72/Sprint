@@ -134,6 +134,7 @@ class Recipe(models.Model):
         """Returns the URL to access a detail record for this recipe."""
         return reverse('recipe_detail', args=[str(self.recipe_id)])
 
+    @property
     def average_rating(self):
         reviews = self.review_set.all()
         if reviews.exists():
