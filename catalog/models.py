@@ -178,4 +178,4 @@ class RecipeNote(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username} - Note on {self.recipe.title}"
+        return f"{self.user.user_name} - Note on {self.recipe.title}"
