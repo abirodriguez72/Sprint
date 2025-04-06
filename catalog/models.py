@@ -134,6 +134,16 @@ class Recipe(models.Model):
         """Returns the URL to access a detail record for this recipe."""
         return reverse('recipe_detail', args=[str(self.recipe_id)])
 
+    def average_rating(self):
+        reviews = self.review_set.all()
+        if reviews.exists():
+            return round(sum([r.rating for r in reviews]) / reviews.count(), 1)
+        return None
+
+    def __str__(self):
+        return self.title
+
+
 
 class Review(models.Model):
     """Model representing a user's review of a recipe."""
