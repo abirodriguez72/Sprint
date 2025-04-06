@@ -2,8 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic, View
 from django.db.models import Q
 from django.contrib.auth.hashers import check_password
-from .models import Recipe, Category, User, Review
-from .forms import UserProfileCreationForm, UserLoginForm, RecipeForm, ReviewForm
+from .models import Recipe, Category, User, Review, RecipeNote
+from .forms import UserProfileCreationForm, UserLoginForm, RecipeForm, ReviewForm, RecipeNoteForm 
 from .decorators import group_required
 
 # Home view: Displays recent recipes and top-level categories.
@@ -171,6 +171,8 @@ def recipe_detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
     reviews = recipe.review_set.all()
     average = recipe.average_rating()
+    notes = RecipeNote.objects.filter(recipe=recipe, is_public=True)  # Only public notes
+    user_note = None
 
     if request.user.is_authenticated:
         existing_review = Review.objects.filter(recipe=recipe, user=request.user).first()
@@ -181,6 +183,10 @@ def recipe_detail(request, recipe_id):
                 review.recipe = recipe
                 review.user = request.user
                 review.save()
+                note = form.save(commit=False)
+                note.recipe = recipe
+                note.user = request.user
+                note.save()
                 return redirect('recipe_detail', recipe_id=recipe.id)
         else:
             form = ReviewForm()
@@ -188,10 +194,13 @@ def recipe_detail(request, recipe_id):
         form = None
         existing_review = None
 
+
     return render(request, 'recipes/recipe_detail.html', {
         'recipe': recipe,
         'reviews': reviews,
         'average_rating': average,
         'form': form,
         'existing_review': existing_review,
+        'notes': notes,
+        'user_note': user_note,
     })
