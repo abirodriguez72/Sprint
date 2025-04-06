@@ -38,6 +38,34 @@
         {% empty %}
             <li>No reviews yet.</li>
         {% endfor %}
+       
+ <h1>{{ recipe.title }}</h1>
+<p><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
+<p><strong>Instructions:</strong> {{ recipe.instructions }}</p>
+
+<h3> Average Rating: {{ average_rating|default:"No ratings yet" }}</h3>
+
+{% if user.is_authenticated %}
+    {% if existing_review %}
+        <p>You already reviewed this recipe.</p>
+    {% else %}
+        <h4>Leave a Review</h4>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Submit Review</button>
+        </form>
+    {% endif %}
+{% else %}
+    <p><a href="{% url 'login' %}">Log in</a> to leave a review.</p>
+{% endif %}
+
+<h3>All Reviews</h3>
+{% for review in reviews %}
+    <p><strong>{{ review.user.username }}</strong> ({{ review.rating }}⭐):<br>{{ review.comment }}</p>
+{% empty %}
+    <p>No reviews yet.</p>
+{% endfor %}
     </ul>
 
     <p><a href="{% url 'recipe_list' %}">Back to Recipe List</a></p>
