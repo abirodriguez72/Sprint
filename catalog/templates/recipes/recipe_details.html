@@ -46,6 +46,25 @@
         {% empty %}
             <li>No reviews yet.</li>
         {% endfor %}
+    
+    <h3>📝 Your Recipe Notes</h3>
+{% if user.is_authenticated %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" name="save_note">Save Note</button>
+    </form>
+{% else %}
+    <p><a href="{% url 'login' %}">Log in</a> to add your own notes.</p>
+{% endif %}
+
+<h3>📖 Public Notes</h3>
+{% for note in notes %}
+    <p><strong>{{ note.user.username }}</strong>: {{ note.note }}</p>
+{% empty %}
+    <p>No public notes yet.</p>
+{% endfor %}
+    
     </ul>
 
     <p><a href="{% url 'recipe_list' %}">Back to Recipe List</a></p>
