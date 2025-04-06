@@ -5,5 +5,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # All root-level URLs go to your catalog app
     path('', include('catalog.urls')),
-    path('', include('recipes.urls')),
 ]

@@ -195,7 +195,7 @@ def recipe_detail(request, recipe_id):
         existing_review = None
 
 
-    return render(request, 'recipes/recipe_detail.html', {
+    return render(request, 'recipes/recipe_details.html', {
         'recipe': recipe,
         'reviews': reviews,
         'average_rating': average,

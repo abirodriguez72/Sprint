@@ -126,6 +126,7 @@ class Recipe(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     photo = models.ImageField(upload_to='recipe_pics/', blank=True, null=True)
+    rating = models.FloatField()
 
     def __str__(self):
         return self.title
@@ -140,10 +141,6 @@ class Recipe(models.Model):
         if reviews.exists():
             return round(sum([r.rating for r in reviews]) / reviews.count(), 1)
         return None
-
-    def __str__(self):
-        return self.title
-
 
 
 class Review(models.Model):
