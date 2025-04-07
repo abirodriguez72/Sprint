@@ -113,7 +113,7 @@ ul {
   overflow: hidden;
 }
 
-.image-item img {
+.image-grid img {
   width: 100%;
   height: auto;
   border-radius: 8px;
@@ -148,23 +148,24 @@ ul {
   font-weight: bold;
 }
 
-.image-grid img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  object-fit: cover;
-}
-
 /* Custom styling for textareas */
 textarea {
   font-family: "Montserrat", sans-serif;
-    font-size: 1em;
-    padding: 10px;
-    border: 1px solid aliceblue;
-    border-radius: 4px;
-    line-height: 1.5;
-    background-color: #1A0148;
+  font-size: 1em;
+  padding: 10px;
+  border: 1px solid aliceblue;
+  border-radius: 4px;
+  line-height: 1.5;
+  background-color: #1A0148;
 }
+
+.container {
+  width: 100%;         /* Take up the full available width */
+  max-width: 1200px;   /* But no more than 1200px on large screens */
+  margin: 0 auto;      /* Center the container horizontally */
+  padding: 0 15px;     /* Optional: Add some padding on the sides */
+}
+
 
 /* Footer styling */
 .footer {

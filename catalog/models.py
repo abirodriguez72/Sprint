@@ -1,7 +1,8 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
-from django.contrib.auth.models import Group, AbstractUser
+from django.contrib.auth.models import Group, User
+from django.conf import settings
 import uuid
 
 CATEGORY_TYPE_CHOICES = [
@@ -70,42 +71,8 @@ class Category(models.Model):
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
-
-from django.contrib.auth.models import AbstractUser
-from django.db import models
-import uuid
-from django.urls import reverse
-
-
-class User(AbstractUser):
-    """Model representing a user"""
-    user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
-    user_name = models.CharField(max_length=100, unique=True)
-    email = models.EmailField(max_length=100, unique=True)
-
-    real_name = models.CharField(max_length=100, help_text='Enter your name')
-    bio = models.TextField(blank=True, null=True)
-    profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
-    user_type = models.ForeignKey('UserType', on_delete=models.SET_NULL, null=True, blank=True)
-
-    username = models.CharField(max_length=100, unique=True)
-
-    USERNAME_FIELD = 'user_name'
-    REQUIRED_FIELDS = ['email', 'real_name']
-
-    class Meta:
-        ordering = ['user_name']
-
-    def get_absolute_url(self):
-        return reverse('user_detail', args=[str(self.user_id)])
-
-    def __str__(self):
-        return self.user_name
-
-
 class UserType(models.Model):
-    """Model representing different types of users (i.e., Admin, Pro, Baker)."""
+    """Model representing different types of users (e.g., Admin, Pro, Baker)."""
     name = models.CharField(max_length=50, unique=True)
     description = models.TextField(blank=True, null=True)
     group = models.ForeignKey('auth.Group', on_delete=models.SET_NULL, null=True, blank=True)
@@ -113,13 +80,28 @@ class UserType(models.Model):
     def __str__(self):
         return self.name
 
+class Profile(models.Model):
+    """Profile model to extend the default Django User model."""
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    real_name = models.CharField(max_length=100, help_text='Enter your name')
+    bio = models.TextField(blank=True, null=True)
+    profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    user_type = models.ForeignKey(UserType, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def get_absolute_url(self):
+        # Adjust the URL pattern as needed
+        return reverse('user_detail', args=[str(self.user.id)])
+
+    def __str__(self):
+        return f"{self.user.username}'s Profile"
+
 
 class Recipe(models.Model):
     """Model representing a recipe (but not a specific user's review of a recipe)."""
     recipe_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=200)
     # Foreign Key used because a recipe can only be written by one user, but users can have multiple recipes
-    user = models.ForeignKey('User', on_delete=models.RESTRICT, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.RESTRICT, null=True)
     ingredients = models.TextField(
         max_length=1000,
         help_text='Enter the ingredients in quantity + ingredient format, e.g., "4 tbsp sugar".'
@@ -163,11 +145,12 @@ class Review(models.Model):
         help_text='The recipe being reviewed.'
     )
     user = models.ForeignKey(
-        'User',
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='reviews',
         help_text='The user who wrote the review.'
     )
+
     rating = models.PositiveSmallIntegerField(
         choices=RATING_CHOICES,
         default=3,

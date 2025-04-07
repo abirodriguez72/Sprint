@@ -1,41 +1,43 @@
 from django import forms
-from django.contrib.auth.hashers import make_password
-from .models import User, Recipe, Review
-from .models import RecipeNote
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User  # Using Django's default user model
+from .models import Profile, Recipe, Review, RecipeNote
 
-class UserProfileCreationForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput, label="Password")
-    confirm_password = forms.CharField(widget=forms.PasswordInput, label="Confirm Password")
+
+# Form to create a new User using Django's built-in UserCreationForm
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
 
     class Meta:
         model = User
-        fields = ['real_name', 'email', 'user_name', 'password', 'confirm_password', 'bio', 'profile_pic', 'user_type']
-
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data.get("password")
-        confirm_password = cleaned_data.get("confirm_password")
-        if password and confirm_password and password != confirm_password:
-            self.add_error("confirm_password", "Passwords do not match")
-        return cleaned_data
+        fields = ("username", "email", "password1", "password2")
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        # Hash the password before saving
-        user.password = make_password(self.cleaned_data["password"])
+        user.email = self.cleaned_data["email"]
         if commit:
             user.save()
         return user
 
+
+# Form to create or update a Profile (with extended user information)
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ["real_name", "bio", "profile_pic", "user_type"]
+
+
+
 class UserLoginForm(forms.Form):
-    user_name = forms.CharField(label="Username", max_length=100)
+    username = forms.CharField(label="Username", max_length=150)
     password = forms.CharField(widget=forms.PasswordInput, label="Password")
 
 
 class RecipeForm(forms.ModelForm):
     class Meta:
         model = Recipe
-        fields = ['title', 'ingredients', 'instructions', 'notes', 'category', 'photo', 'rating',]
+        # If you still want to include the rating field in Recipe, otherwise remove it
+        fields = ['title', 'ingredients', 'instructions', 'notes', 'category', 'photo', 'rating']
         widgets = {
             'ingredients': forms.Textarea(attrs={
                 'rows': 6,
@@ -54,16 +56,13 @@ class RecipeForm(forms.ModelForm):
             }),
             'category': forms.CheckboxSelectMultiple(),
             'rating': forms.Select(attrs={'class': 'form-select'}),
-            'comment': forms.Textarea(attrs={'rows': 3}),
         }
 
     def clean_category(self):
-        # Ensure that at least one category is selected.
         categories = self.cleaned_data.get('category')
         if not categories:
             raise forms.ValidationError("Please select at least one category.")
         return categories
-
 
 
 class ReviewForm(forms.ModelForm):
@@ -71,11 +70,15 @@ class ReviewForm(forms.ModelForm):
         model = Review
         fields = ['rating', 'comment']
         widgets = {
-            'rating': forms.Select(),  # Django will use the RATING_CHOICES defined in your model
+            'rating': forms.Select(),  # Uses RATING_CHOICES from the model
             'comment': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Enter your review here'}),
         }
+
+
 class RecipeNoteForm(forms.ModelForm):
     class Meta:
         model = RecipeNote
-        fields = ['note', 'is_public']
-
+        fields = ['note']
+        widgets = {
+            'note': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Enter your private note here'}),
+        }

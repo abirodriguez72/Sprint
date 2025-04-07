@@ -8,12 +8,14 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,400;1,100;1,400&family=Source+Sans+3:ital,wght@0,200;0,400;1,200;1,400&display=swap">
 </head>
 <body>
-<h1>Review for {{ recipe.title }}</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn">Submit Review</button>
-    </form>
-    <p><a href="{{ recipe.get_absolute_url }}">Back to Recipe</a></p>
+    <div class="container">
+        <h1>Review for {{ recipe.title }}</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">Submit Review</button>
+        </form>
+        <p><a href="{{ recipe.get_absolute_url }}">Back to Recipe</a></p>
+    </div>
 </body>
 </html>

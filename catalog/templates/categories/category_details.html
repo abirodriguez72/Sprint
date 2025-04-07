@@ -2,41 +2,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="{% static '/style.css' %}">
-    <link rel="stylesheet" href=href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap">
+    <meta charset="UTF-8">
     <title>{{ category.name }} - Category Details</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,400;1,100;1,400&family=Source+Sans+3:ital,wght@0,200;0,400;1,200;1,400&display=swap">
 </head>
 <body>
-    <h1>Category: {{ category.name }}</h1>
+    <div class="container">
+        <h1>Category: {{ category.name }}</h1>
 
-    {% if category.parent %}
-        <p>Parent Category: <a href="{% url 'category_detail' category.parent.slug %}">{{ category.parent.name }}</a></p>
-    {% endif %}
+        {% if category.parent %}
+            <p>Parent Category: <a href="{% url 'category_detail' category.parent.slug %}">{{ category.parent.name }}</a></p>
+        {% endif %}
 
-    {% if subcategories %}
-        <h2>Subcategories</h2>
+        {% if subcategories %}
+            <h2>Subcategories</h2>
+            <ul>
+                {% for sub in subcategories %}
+                    <li>
+                        <a href="{% url 'category_detail' sub.slug %}">{{ sub.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No subcategories available.</p>
+        {% endif %}
+
+        <h2>Recipes in {{ category.name }}</h2>
         <ul>
-            {% for sub in subcategories %}
+            {% for recipe in recipes %}
                 <li>
-                    <a href="{% url 'category_detail' sub.slug %}">{{ sub.name }}</a>
+                    <a href="{% url 'recipe_detail' recipe.recipe_id %}">{{ recipe.title }}</a>
                 </li>
+            {% empty %}
+                <li>No recipes available in this category.</li>
             {% endfor %}
         </ul>
-    {% else %}
-        <p>No subcategories available.</p>
-    {% endif %}
 
-    <h2>Recipes in {{ category.name }}</h2>
-    <ul>
-        {% for recipe in recipes %}
-            <li>
-                <a href="{% url 'recipe_detail' recipe.recipe_id %}">{{ recipe.title }}</a>
-            </li>
-        {% empty %}
-            <li>No recipes available in this category.</li>
-        {% endfor %}
-    </ul>
-
-    <p><a href="{% url 'home' %}">Back to Home</a></p>
+        <p><a href="{% url 'home' %}">Back to Home</a></p>
+    </div>
 </body>
 </html>

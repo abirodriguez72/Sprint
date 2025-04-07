@@ -2,49 +2,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="{% static '/style.css' %}">
-    <link rel="stylesheet" href=href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap">
-    <title>{{ user.user_name }}'s Profile</title>
+    <meta charset="UTF-8">
+    <title>{{ user.username }}'s Profile</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap">
 </head>
 <body>
-    <h1>{{ user.user_name }}'s Profile</h1>
-    <p><strong>Real Name:</strong> {{ user.real_name }}</p>
-    <p><strong>Email:</strong> {{ user.email }}</p>
+    <div class="container">
+        <h1>{{ user.username }}'s Profile</h1>
+        <p><strong>Real Name:</strong> {{ user.profile.real_name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
 
-    {% if user.bio %}
-        <p><strong>Bio:</strong> {{ user.bio }}</p>
-    {% endif %}
+        {% if user.profile.bio %}
+            <p><strong>Bio:</strong> {{ user.profile.bio }}</p>
+        {% endif %}
 
-    {% if user.profile_pic %}
-        <img src="{{ user.profile_pic.url }}" alt="Profile picture of {{ user.user_name }}">
-    {% endif %}
-
-    <h2>Recipes by {{ user.user_name }}</h2>
-    <ul>
-        {% for recipe in recipes %}
-            <li>
-                <a href="{% url 'recipe_detail' recipe.recipe_id %}">{{ recipe.title }}</a>
-            </li>
-        {% empty %}
-            <li>No recipes posted by this user.</li>
-        {% endfor %}
-    </ul>
-
-    <h2>Reviews by {{ user.user_name }}</h2>
-    <ul>
-        {% for review in reviews %}
-            <li>
-                <a href="{% url 'review_detail' review.review_id %}">{{ review.recipe.title }}</a> - Rated: {{ review.rating }} stars
-                {% if review.comment %}
-                    <br><em>{{ review.comment }}</em>
-                {% endif %}
-                <br><small>Reviewed on {{ review.created_at|date:"M d, Y" }}</small>
-            </li>
-        {% empty %}
-            <li>No reviews by this user.</li>
-        {% endfor %}
-    </ul>
-
-    <p><a href="{% url 'home' %}">Back to Home</a></p>
-</body>
-</html>
+        {%

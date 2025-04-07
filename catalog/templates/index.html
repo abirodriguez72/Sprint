@@ -35,7 +35,7 @@
                     <div class="overlay">
                         <a href="{% url 'recipe_detail' recipe.recipe_id %}">View Recipe</a>
                         {% if recipe.user %}
-                            <a href="{% url 'user_detail' recipe.user.user_id %}">View Baker</a>
+                            <a href="{% url 'user_detail' recipe.user.id %}">View Baker</a>
                         {% endif %}
                     </div>
                 </div>

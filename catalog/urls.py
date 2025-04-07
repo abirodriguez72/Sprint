@@ -1,4 +1,4 @@
-from django.urls import path, re_path
+from django.urls import path
 from . import views
 
 urlpatterns = [
@@ -12,4 +12,5 @@ urlpatterns = [
     path('recipes/<uuid:recipe_id>/review/', views.create_review, name='create_review'),
     path('', views.recipe_list, name='recipe_list'),
     path('recipe/<int:recipe_id>/', views.recipe_detail, name='recipe_detail'),
+    path('recipes/<uuid:recipe_id>/note/', views.create_recipe_note, name='create_recipe_note'),
 ]
