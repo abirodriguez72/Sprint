@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>{{ user.username }}'s Profile</title>
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,400;1,100;1,400&family=Source+Sans+3:ital,wght@0,200;0,400;1,200;1,400&display=swap">
 </head>
 <body>
     <div class="container">
@@ -17,4 +17,37 @@
             <p><strong>Bio:</strong> {{ user.profile.bio }}</p>
         {% endif %}
 
-        {%
+        {% if user.profile.profile_pic %}
+            <img src="{{ user.profile.profile_pic.url }}" alt="Profile picture of {{ user.username }}">
+        {% endif %}
+
+        <h2>Recipes by {{ user.username }}</h2>
+        <ul>
+            {% for recipe in recipes %}
+                <li>
+                    <a href="{% url 'recipe_detail' recipe.recipe_id %}">{{ recipe.title }}</a>
+                </li>
+            {% empty %}
+                <li>No recipes posted by this user.</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Reviews by {{ user.username }}</h2>
+        <ul>
+            {% for review in reviews %}
+                <li>
+                    <a href="{% url 'review_detail' review.review_id %}">{{ review.recipe.title }}</a> - Rated: {{ review.rating }} stars
+                    {% if review.comment %}
+                        <br><em>{{ review.comment }}</em>
+                    {% endif %}
+                    <br><small>Reviewed on {{ review.created_at|date:"M d, Y" }}</small>
+                </li>
+            {% empty %}
+                <li>No reviews by this user.</li>
+            {% endfor %}
+        </ul>
+
+        <p><a href="{% url 'home' %}">Back to Home</a></p>
+    </div>
+</body>
+</html>

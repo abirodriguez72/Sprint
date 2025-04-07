@@ -150,6 +150,7 @@ ul {
 
 /* Custom styling for textareas */
 textarea {
+  color: aliceblue;
   font-family: "Montserrat", sans-serif;
   font-size: 1em;
   padding: 10px;
