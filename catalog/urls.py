@@ -1,4 +1,6 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
@@ -14,3 +16,6 @@ urlpatterns = [
     path('recipe/<int:recipe_id>/', views.recipe_detail, name='recipe_detail'),
     path('recipes/<uuid:recipe_id>/note/', views.create_recipe_note, name='create_recipe_note'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

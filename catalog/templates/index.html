@@ -23,14 +23,14 @@
         </header>
 
         <h2>Recent Recipes</h2>
-        <!-- Image grid: force 3 columns to produce three rows when nine recipes are present -->
+        <!-- Image grid: force 3 columns to produce three rows when up to nine recipes are available -->
         <div class="image-grid">
             {% for recipe in recent_recipes|slice:":9" %}
                 <div class="image-item">
                     {% if recipe.photo %}
-                        <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}">
+                        <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="responsive-img">
                     {% else %}
-                        <img src="{% static 'default_recipe.jpg' %}" alt="{{ recipe.title }}">
+                        <img src="{% static 'default_recipe.jpg' %}" alt="{{ recipe.title }}" class="responsive-img">
                     {% endif %}
                     <div class="overlay">
                         <a href="{% url 'recipe_detail' recipe.recipe_id %}">View Recipe</a>

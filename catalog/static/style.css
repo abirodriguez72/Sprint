@@ -8,6 +8,14 @@ body {
   padding: 0;
 }
 
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
 /* Header styling using flexbox */
 .header {
   background-color: #1A0148;
@@ -148,6 +156,20 @@ ul {
   font-weight: bold;
 }
 
+/* General responsive images */
+.responsive-img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Profile picture styling */
+.profile-pic {
+  width: 150px;      /* Adjust as needed */
+  height: 150px;     /* Fixed height for square images */
+  object-fit: cover; /* Crop if needed */
+  border-radius: 50%; /* Circular profile picture */
+}
+
 /* Custom styling for textareas */
 textarea {
   color: aliceblue;
@@ -160,14 +182,6 @@ textarea {
   background-color: #1A0148;
 }
 
-.container {
-  width: 100%;         /* Take up the full available width */
-  max-width: 1200px;   /* But no more than 1200px on large screens */
-  margin: 0 auto;      /* Center the container horizontally */
-  padding: 0 15px;     /* Optional: Add some padding on the sides */
-}
-
-
 /* Footer styling */
 .footer {
   background-color: #300285;
@@ -177,4 +191,31 @@ textarea {
   font-family: "Montserrat", sans-serif;
   font-size: 1em;
   width: 100%;
+}
+
+/* Media queries for smaller screens */
+@media (max-width: 768px) {
+  .header-center {
+    font-size: 3em;
+  }
+  .profile-pic {
+    width: 100px;
+    height: 100px;
+  }
+  .image-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    text-align: center;
+  }
+  .header-left, .header-center, .header-right {
+    width: 100%;
+  }
+  .image-grid {
+    grid-template-columns: 1fr;
+  }
 }

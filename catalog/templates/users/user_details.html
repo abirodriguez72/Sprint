@@ -18,7 +18,7 @@
         {% endif %}
 
         {% if user.profile.profile_pic %}
-            <img src="{{ user.profile.profile_pic.url }}" alt="Profile picture of {{ user.username }}">
+            <img src="{{ user.profile.profile_pic.url }}" alt="Profile picture of {{ user.username }}" class="profile-pic">
         {% endif %}
 
         <h2>Recipes by {{ user.username }}</h2>

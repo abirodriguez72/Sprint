@@ -5,37 +5,39 @@
     <meta charset="UTF-8">
     <title>Recipes</title>
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,400;1,100;1,400&family=Source+Sans+3:ital,wght@0,200;0,400;1,200;1,400&display=swap">
 </head>
 <body>
-    <h1>Recipe List</h1>
-    <ul>
-        {% for recipe in recipes %}
-            <li>
-                <a href="{% url 'recipe_detail' recipe.recipe_id %}">{{ recipe.title }}</a>
-                by <a href="{% url 'user_detail' recipe.user.id %}">{{ recipe.user.username }}</a>
-            </li>
-        {% empty %}
-            <li>No recipes available.</li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h1>Recipe List</h1>
+        <ul>
+            {% for recipe in recipes %}
+                <li>
+                    <a href="{% url 'recipe_detail' recipe.recipe_id %}">{{ recipe.title }}</a>
+                    by <a href="{% url 'user_detail' recipe.user.id %}">{{ recipe.user.username }}</a>
+                </li>
+            {% empty %}
+                <li>No recipes available.</li>
+            {% endfor %}
+        </ul>
 
-    {% if is_paginated %}
-        <div class="pagination">
-            <span class="page-links">
-                {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                {% endif %}
-                <span class="current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        {% if is_paginated %}
+            <div class="pagination">
+                <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    {% endif %}
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+                    {% endif %}
                 </span>
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">Next</a>
-                {% endif %}
-            </span>
-        </div>
-    {% endif %}
+            </div>
+        {% endif %}
 
-    <p><a href="{% url 'home' %}">Back to Home</a></p>
+        <p><a href="{% url 'home' %}">Back to Home</a></p>
+    </div>
 </body>
 </html>

@@ -8,62 +8,64 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,400;1,100;1,400&family=Source+Sans+3:ital,wght@0,200;0,400;1,200;1,400&display=swap">
 </head>
 <body>
-    <h1>{{ recipe.title }}</h1>
-    <p><strong>By:</strong> <a href="{% url 'user_detail' recipe.user.id %}">{{ recipe.user.username }}</a></p>
+    <div class="container">
+        <h1>{{ recipe.title }}</h1>
+        <p><strong>By:</strong> <a href="{% url 'user_detail' recipe.user.id %}">{{ recipe.user.username }}</a></p>
 
-    <h2>Ingredients</h2>
-    <p>{{ recipe.ingredients }}</p>
+        <h2>Ingredients</h2>
+        <p>{{ recipe.ingredients }}</p>
 
-    <h2>Instructions</h2>
-    <p>{{ recipe.instructions }}</p>
+        <h2>Instructions</h2>
+        <p>{{ recipe.instructions }}</p>
 
-    {% if recipe.notes %}
-        <h3>Notes</h3>
-        <p>{{ recipe.notes }}</p>
-    {% endif %}
+        {% if recipe.notes %}
+            <h3>Notes</h3>
+            <p>{{ recipe.notes }}</p>
+        {% endif %}
 
-    {% if recipe.photo %}
-        <img src="{{ recipe.photo.url }}" alt="Photo of {{ recipe.title }}">
-    {% endif %}
+        {% if recipe.photo %}
+            <img class="responsive-img" src="{{ recipe.photo.url }}" alt="Photo of {{ recipe.title }}">
+        {% endif %}
 
-    <h2>Reviews</h2>
-    {% if recipe.average_rating %}
-        <p>Average Rating: {{ recipe.average_rating|floatformat:1 }} stars</p>
-    {% else %}
-        <p>No ratings yet.</p>
-    {% endif %}
-    <ul>
-        {% for review in reviews %}
-            <li>
-                <strong>{{ review.user.username }}</strong> rated this recipe {{ review.rating }} stars.
-                {% if review.comment %}
-                    <p>{{ review.comment }}</p>
-                {% endif %}
-                <p><em>Reviewed on {{ review.created_at|date:"M d, Y" }}</em></p>
-            </li>
+        <h2>Reviews</h2>
+        {% if recipe.average_rating %}
+            <p>Average Rating: {{ recipe.average_rating|floatformat:1 }} stars</p>
+        {% else %}
+            <p>No ratings yet.</p>
+        {% endif %}
+        <ul>
+            {% for review in reviews %}
+                <li>
+                    <strong>{{ review.user.username }}</strong> rated this recipe {{ review.rating }} stars.
+                    {% if review.comment %}
+                        <p>{{ review.comment }}</p>
+                    {% endif %}
+                    <p><em>Reviewed on {{ review.created_at|date:"M d, Y" }}</em></p>
+                </li>
+            {% empty %}
+                <li>No reviews yet.</li>
+            {% endfor %}
+        </ul>
+
+        <h3>📝 Your Recipe Notes</h3>
+        {% if user.is_authenticated %}
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" name="save_note" class="btn">Save Note</button>
+            </form>
+        {% else %}
+            <p><a href="{% url 'login' %}">Log in</a> to add your own notes.</p>
+        {% endif %}
+
+        <h3>📖 Public Notes</h3>
+        {% for note in notes %}
+            <p><strong>{{ note.user.username }}</strong>: {{ note.note }}</p>
         {% empty %}
-            <li>No reviews yet.</li>
+            <p>No public notes yet.</p>
         {% endfor %}
-    </ul>
 
-    <h3>📝 Your Recipe Notes</h3>
-    {% if user.is_authenticated %}
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" name="save_note" class="btn">Save Note</button>
-        </form>
-    {% else %}
-        <p><a href="{% url 'login' %}">Log in</a> to add your own notes.</p>
-    {% endif %}
-
-    <h3>📖 Public Notes</h3>
-    {% for note in notes %}
-        <p><strong>{{ note.user.username }}</strong>: {{ note.note }}</p>
-    {% empty %}
-        <p>No public notes yet.</p>
-    {% endfor %}
-
-    <p><a href="{% url 'recipe_list' %}">Back to Recipe List</a></p>
+        <p><a href="{% url 'recipe_list' %}">Back to Recipe List</a></p>
+    </div>
 </body>
 </html>
