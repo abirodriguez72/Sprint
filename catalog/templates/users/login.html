@@ -1,24 +1,17 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Log In - Dainty Batter</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap">
-</head>
-<body>
-    <div class="container">
-        <h1>Log In</h1>
-        {% if error %}
-            <p style="color: red;">{{ error }}</p>
-        {% endif %}
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn">Log In</button>
-        </form>
-        <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
-    </div>
-</body>
-</html>
+
+{% block title %}Log In – Dainty Batter{% endblock %}
+
+{% block content %}
+  <h1>Log In</h1>
+  {% if error %}
+    <p style="color: red;">{{ error }}</p>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Log In</button>
+  </form>
+  <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+{% endblock %}
