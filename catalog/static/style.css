@@ -165,15 +165,15 @@ ul {
 
 /* Profile picture styling */
 .profile-pic {
-  width: 150px;      /* Adjust as needed */
+  width: 150px;
   height: 150px;     /* Fixed height for square images */
-  object-fit: cover; /* Crop if needed */
+  object-fit: cover;
   border-radius: 50%; /* Circular profile picture */
 }
 
 /* Constrain and style recipe detail image */
 .recipe-photo {
-  max-height: 300px;    /* adjust to taste */
+  max-height: 300px;
   object-fit: cover;
   width: 100%;
   margin-bottom: 1rem;  /* breathing room below the image */
@@ -236,4 +236,18 @@ textarea {
   .recipe-photo {
     max-height: 200px;  /* smaller cap for mobile */
   }
+}
+
+/* Style logout button like other nav links */
+.navbar-nav .btn-link {
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.navbar-nav .btn-link:hover {
+  color: #fff;                        /* hover color */
+  text-decoration: underline;
 }
