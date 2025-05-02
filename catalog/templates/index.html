@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <title>Dainty Batter - Home</title>
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,400;1,100;1,400&family=Source+Sans+3:ital,wght@0,200;0,400;1,200;1,400&display=swap">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,400;1,100;1,400&
+          family=Source+Sans+3:ital,wght@0,200;0,400;1,200;1,400&display=swap">
 </head>
 <body>
     <div class="container">
@@ -36,22 +38,10 @@
         </header>
 
         <h2>Recent Recipes</h2>
-        <!-- Image grid: force 3 columns to produce three rows when up to nine recipes are available -->
+        <!-- Image grid… -->
         <div class="image-grid">
             {% for recipe in recent_recipes|slice:":9" %}
-                <div class="image-item">
-                    {% if recipe.photo %}
-                        <img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="responsive-img">
-                    {% else %}
-                        <img src="{% static 'default_recipe.jpg' %}" alt="{{ recipe.title }}" class="responsive-img">
-                    {% endif %}
-                    <div class="overlay">
-                        <a href="{% url 'recipe_detail' recipe.recipe_id %}">View Recipe</a>
-                        {% if recipe.user %}
-                            <a href="{% url 'user_detail' recipe.user.id %}">View Baker</a>
-                        {% endif %}
-                    </div>
-                </div>
+                <!-- … -->
             {% empty %}
                 <p>No recipes found.</p>
             {% endfor %}
@@ -61,12 +51,21 @@
         <ul>
             {% for category in categories %}
                 <li>
-                    <a href="{% url 'category_detail' category.slug %}">{{ category.name }}</a>
+                    <a href="{% url 'category_detail' category.slug %}">
+                        {{ category.name }}
+                    </a>
                 </li>
             {% empty %}
                 <li>No categories available.</li>
             {% endfor %}
         </ul>
+
+        <!-- NEW: Forum teaser -->
+        <h2>Community Forum</h2>
+        <p>
+          Join the conversation with fellow bakers!
+          <a href="{% url 'forum_home' %}" class="btn btn-primary">Visit the Forum</a>
+        </p>
 
         <p>You have visited this page {{ num_visits }} time{{ num_visits|pluralize }}.</p>
 

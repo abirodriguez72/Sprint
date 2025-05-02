@@ -4,6 +4,7 @@ from django.contrib.auth.models import User  # Using Django's default user model
 from .models import Profile, Recipe, Review, RecipeNote
 
 
+
 # Form to create a new User using Django's built-in UserCreationForm
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)

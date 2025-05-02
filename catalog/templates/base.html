@@ -42,6 +42,10 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'category_list' %}">All Categories</a>
           </li>
+          <!-- NEW: Forum link -->
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'forum_home' %}">Forum</a>
+          </li>
         </ul>
 
         <!-- Right side: auth links -->
@@ -53,7 +57,11 @@
             <li class="nav-item">
               <form method="post" action="{% url 'logout' %}" class="d-inline">
                 {% csrf_token %}
-                <button type="submit" class="nav-link btn btn-link" style="display:inline; padding:0; color:inherit;">
+                <button
+                  type="submit"
+                  class="nav-link btn btn-link"
+                  style="display:inline; padding:0; color:inherit;"
+                >
                   Log Out
                 </button>
               </form>
