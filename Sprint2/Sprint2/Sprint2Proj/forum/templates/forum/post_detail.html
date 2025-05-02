@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background-color: navy;
+            color: red;
+            font-family: 'Arial', sans-serif;
+        }
+        .reply-box {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Post by {{ post.user.username }}</h2>
+    <p>{{ post.content }}</p>
+
+    <h3>Replies:</h3>
+    {% for reply in post.replies.all %}
+        <p>{{ reply.user.username }}: {{ reply.content }}</p>
+    {% endfor %}
+
+    <form method="post">
+        {% csrf_token %}
+        <textarea name="reply" placeholder="Type your reply..."></textarea><br>
+        <button type="submit">Reply</button>
+    </form>
+</body>
+</html>

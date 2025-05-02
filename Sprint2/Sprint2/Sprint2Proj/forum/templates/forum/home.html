@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Forum Home</title>
+    <style>
+        body {
+            background-color: navy;
+            color: red;
+            font-family: 'Arial', sans-serif;
+        }
+        .post {
+            background: white;
+            color: black;
+            margin: 10px;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        a {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the SOS Baking Forum! </h1>
+    {% for post in posts %}
+        <div class="post">
+            <p><strong>{{ post.user.username }}</strong>: {{ post.content }}</p>
+            <a href="{% url 'post_detail' post.id %}">Reply</a>
+            <a href="{% url 'follow_user' post.user.id %}">Follow {{ post.user.username }}</a>
+        </div>
+    {% endfor %}
+</body>
+</html>
