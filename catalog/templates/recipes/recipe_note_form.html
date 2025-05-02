@@ -1,14 +1,13 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block title %}Add Note – {{ recipe.title }} – Dainty Batter{% endblock %}
-
-{% block content %}
-  <h1>Add a Private Note for “{{ recipe.title }}”</h1>
-  <form method="post">
+{% if user.is_authenticated %}
+  <h3>📝 Your Private Note</h3>
+  <form
+    method="post"
+    action="{% url 'create_recipe_note' recipe_id=recipe.recipe_id %}"
+  >
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn">Save Note</button>
   </form>
-  <p><a href="{{ recipe.get_absolute_url }}">Back to Recipe Details</a></p>
-{% endblock %}
+{% else %}
+  <p><a href="{% url 'login' %}">Log in</a> to add your own notes.</p>
+{% endif %}

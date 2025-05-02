@@ -50,18 +50,34 @@
     {% endfor %}
   </ul>
 
-  <h3>📝 Your Recipe Notes</h3>
-  {% if user.is_authenticated %}
-    <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" name="save_note" class="btn">Save Note</button>
-    </form>
-  {% else %}
+      <h3>📝 Your Private Note</h3>
+  {% if user_note %}
+    <p>{{ user_note.note }}</p>
     <p>
-      <a href="{% url 'login' %}">Log in</a> to add your own notes.
+      <a
+        class="btn"
+        href="{% url 'create_recipe_note' recipe_id=recipe.recipe_id %}"
+      >
+        Edit Your Private Note
+      </a>
     </p>
+  {% else %}
+    {% if user.is_authenticated %}
+      <p>
+        <a
+          class="btn"
+          href="{% url 'create_recipe_note' recipe_id=recipe.recipe_id %}"
+        >
+          Add a Private Note
+        </a>
+      </p>
+    {% else %}
+      <p>
+        <a href="{% url 'login' %}">Log in</a> to add your own notes.
+      </p>
+    {% endif %}
   {% endif %}
+
 
   <h3>📖 Public Notes</h3>
   {% for note in notes %}

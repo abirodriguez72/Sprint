@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic, View
 from django.db.models import Q
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
 from .models import Recipe, Category, User, Review, RecipeNote
@@ -35,25 +36,49 @@ class RecipeListView(generic.ListView):
     paginate_by = 10  # Display 10 recipes per page
 
 # Recipe Detail View (includes Reviews)
+from .models import RecipeNote
+
 class RecipeDetailView(generic.DetailView):
     model = Recipe
     template_name = 'recipes/recipe_details.html'
     context_object_name = 'recipe'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['reviews'] = self.object.reviews.all()
-        # average_rating is a property, so no need to call it as a function.
-        context['average_rating'] = self.object.average_rating
-        context['notes'] = RecipeNote.objects.filter(recipe=self.object, is_public=True)
-        return context
+        ctx = super().get_context_data(**kwargs)
+
+        # existing context
+        ctx['reviews']        = self.object.reviews.all()
+        ctx['average_rating'] = self.object.average_rating
+        ctx['notes']          = RecipeNote.objects.filter(recipe=self.object, is_public=True)
+
+        # add the current user’s private note (if any)
+        user = self.request.user
+        if user.is_authenticated:
+            ctx['user_note'] = RecipeNote.objects.filter(
+                recipe=self.object,
+                user=user,
+                is_public=False
+            ).first()
+        else:
+            ctx['user_note'] = None
+
+        return ctx
 
 def recipe_detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, recipe_id=recipe_id)
-    reviews = recipe.reviews.all()  # Using related_name 'reviews'
-    average = recipe.average_rating  # average_rating is a property
-    notes = RecipeNote.objects.filter(recipe=recipe, is_public=True)
-    user_note = None  # For future use (if needed)
+    reviews = recipe.reviews.all()
+    average = recipe.average_rating
+    public_notes = RecipeNote.objects.filter(recipe=recipe, is_public=True)
+
+    # load any private note by this user on this recipe
+    user_note = None
+    if request.user.is_authenticated:
+        user_note = RecipeNote.objects.filter(
+            recipe=recipe,
+            user=request.user,
+            is_public=False
+        ).first()
+
     form = None
     existing_review = None
     if request.user.is_authenticated:
@@ -68,13 +93,14 @@ def recipe_detail(request, recipe_id):
                 return redirect('recipe_detail', recipe_id=recipe.recipe_id)
         else:
             form = ReviewForm()
+
     return render(request, 'recipes/recipe_details.html', {
         'recipe': recipe,
         'reviews': reviews,
         'average_rating': average,
         'form': form,
         'existing_review': existing_review,
-        'notes': notes,
+        'notes': public_notes,
         'user_note': user_note,
     })
 
@@ -118,17 +144,15 @@ def login_view(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            try:
-                user = User.objects.get(username=username)
-                if check_password(password, user.password):
-                    request.session['user_id'] = str(user.id)
-                    return redirect('user_detail', user_id=user.id)
-                else:
-                    error = "Invalid username or password"
-            except User.DoesNotExist:
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)                  # ← log them in
+                return redirect('user_detail', user_id=user.id)
+            else:
                 error = "Invalid username or password"
     else:
         form = UserLoginForm()
+
     return render(request, 'users/login.html', {'form': form, 'error': error})
 
 # User Detail View: Displays a user profile and their recipes and reviews.
@@ -181,8 +205,8 @@ def create_recipe_note(request, recipe_id):
         if form.is_valid():
             note = form.save(commit=False)
             note.recipe = recipe
-            note.user = request.user  # Associate the note with the logged-in user
-            note.is_public = False   # Force the note to be private
+            note.user = request.user  # Associates the note with the logged-in user
+            note.is_public = False   # Forces the note to be private
             note.save()
             return redirect(recipe.get_absolute_url())
     else:
