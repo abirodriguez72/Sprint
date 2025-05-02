@@ -35,6 +35,7 @@
   {% else %}
     <p>No ratings yet.</p>
   {% endif %}
+
   <ul>
     {% for review in reviews %}
       <li>
@@ -57,5 +58,19 @@
       <button type="submit" name="save_note" class="btn">Save Note</button>
     </form>
   {% else %}
-    <p><a href="{% url 'login' %}">Log in</a> to add your own notes.</p>
-  {% endif
+    <p>
+      <a href="{% url 'login' %}">Log in</a> to add your own notes.
+    </p>
+  {% endif %}
+
+  <h3>📖 Public Notes</h3>
+  {% for note in notes %}
+    <p>
+      <strong>{{ note.user.username }}</strong>: {{ note.note }}
+    </p>
+  {% empty %}
+    <p>No public notes yet.</p>
+  {% endfor %}
+
+  <p><a href="{% url 'recipe_list' %}">Back to Recipe List</a></p>
+{% endblock %}
