@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic, View
+from django.views.generic import ListView
 from django.db.models import Q
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
-from .models import Recipe, Category, User, Review, RecipeNote
+from .models import Recipe, Category, User, Review, RecipeNote, Category
 from .forms import (CustomUserCreationForm, ProfileForm, UserLoginForm,
                     RecipeForm, ReviewForm, RecipeNoteForm)
 from .decorators import group_required
@@ -103,6 +104,10 @@ def recipe_detail(request, recipe_id):
         'notes': public_notes,
         'user_note': user_note,
     })
+class CategoryListView(ListView):
+    model = Category
+    template_name = 'categories/category_list.html'
+    context_object_name = 'categories'
 
 # Category Detail View: Displays a category, its subcategories, and its recipes.
 def category_detail(request, slug):
@@ -114,7 +119,7 @@ def category_detail(request, slug):
         'recipes': recipes,
         'subcategories': subcategories,
     }
-    return render(request, 'categories/category_details.html', context)
+    return render(request, 'categories/category_detail.html', context)
 
 # Signup view: Creates a new user and profile.
 def signup_view(request):
