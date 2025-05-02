@@ -39,34 +39,31 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'recipe_list' %}">All Recipes</a>
           </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'category_list' %}">All Categories</a>
-            </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'category_list' %}">All Categories</a>
+          </li>
         </ul>
 
         <!-- Right side: auth links -->
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           {% if user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'user_detail' user.id %}">
-                Profile
-              </a>
+              <a class="nav-link" href="{% url 'user_detail' user.id %}">Profile</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'logout' %}">
-                Log Out
-              </a>
+              <form method="post" action="{% url 'logout' %}" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="nav-link btn btn-link" style="display:inline; padding:0; color:inherit;">
+                  Log Out
+                </button>
+              </form>
             </li>
           {% else %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'login' %}">
-                Log In
-              </a>
+              <a class="nav-link" href="{% url 'login' %}">Log In</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'signup' %}">
-                Sign Up
-              </a>
+              <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
             </li>
           {% endif %}
         </ul>
