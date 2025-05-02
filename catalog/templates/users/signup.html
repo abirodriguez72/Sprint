@@ -4,14 +4,22 @@
 {% block title %}Sign Up – Dainty Batter{% endblock %}
 
 {% block content %}
-  <h1>Create Your Profile</h1>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <h2>Account Information</h2>
-    {{ user_form.as_p }}
-    <h2>Profile Information</h2>
-    {{ profile_form.as_p }}
-    <button type="submit" class="btn">Sign Up</button>
-  </form>
-  <p>Already have an account? <a href="{% url 'login' %}">Log In</a></p>
+  {% if user.is_authenticated %}
+    <div class="alert alert-info">
+      You are already signed in as <strong>{{ user.username }}</strong>.
+      <a href="{% url 'user_detail' user.id %}">View your profile</a> or
+      <a href="{% url 'logout' %}">Log out</a> to create a different account.
+    </div>
+  {% else %}
+    <h1>Create Your Profile</h1>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <h2>Account Information</h2>
+      {{ user_form.as_p }}
+      <h2>Profile Information</h2>
+      {{ profile_form.as_p }}
+      <button type="submit" class="btn">Sign Up</button>
+    </form>
+    <p>Already have an account? <a href="{% url 'login' %}">Log In</a></p>
+  {% endif %}
 {% endblock %}

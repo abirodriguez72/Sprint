@@ -1,25 +1,31 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LogoutView
 from . import views
 from .views import CategoryListView
 
 urlpatterns = [
+    # Home
     path('', views.home, name='home'),
+
+    # Recipe CRUD & listing
     path('recipes/', views.RecipeListView.as_view(), name='recipe_list'),
     path('recipes/<uuid:pk>/', views.RecipeDetailView.as_view(), name='recipe_detail'),
-    path('categories/<slug:slug>/', views.category_details, name='category_detail'),
+    path('recipes/<uuid:recipe_id>/review/', views.create_review, name='create_review'),
+    path('recipes/<uuid:recipe_id>/note/', views.create_recipe_note, name='create_recipe_note'),
+
+    # Category listing & detail
+    path('categories/', CategoryListView.as_view(), name='category_list'),
+    path('categories/<slug:slug>/', views.category_detail, name='category_detail'),
+
+    # User profile
     path('users/<int:user_id>/', views.user_detail, name='user_detail'),
+
+    # Auth
     path('signup/', views.signup_view, name='signup'),
     path('login/', views.login_view, name='login'),
-    path('recipes/<uuid:recipe_id>/review/', views.create_review, name='create_review'),
-    path('', views.recipe_list, name='recipe_list'),
-    path('recipe/<int:recipe_id>/', views.recipe_detail, name='recipe_detail'),
-    path('recipes/<uuid:recipe_id>/note/', views.create_recipe_note, name='create_recipe_note'),
-    path('categories/', CategoryListView.as_view(), name='category_list'),
-    path('categories/<slug:slug>/', views.category_detail,  name='category_detail'),
-    path('logout/', LogoutView.as_view(), name='logout'),
+    path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
 ]
 
 if settings.DEBUG:

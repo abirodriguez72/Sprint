@@ -171,6 +171,20 @@ ul {
   border-radius: 50%; /* Circular profile picture */
 }
 
+/* Constrain and style recipe detail image */
+.recipe-photo {
+  max-height: 300px;    /* adjust to taste */
+  object-fit: cover;
+  width: 100%;
+  margin-bottom: 1rem;  /* breathing room below the image */
+}
+
+@media (min-width: 768px) {
+  .recipe-photo {
+    margin-left: 1rem;  /* spacing to the left on larger screens */
+  }
+}
+
 /* Custom styling for textareas */
 textarea {
   color: aliceblue;
@@ -218,5 +232,8 @@ textarea {
   }
   .image-grid {
     grid-template-columns: 1fr;
+  }
+  .recipe-photo {
+    max-height: 200px;  /* smaller cap for mobile */
   }
 }

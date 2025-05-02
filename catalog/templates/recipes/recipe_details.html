@@ -4,11 +4,27 @@
 {% block title %}{{ recipe.title }} – Dainty Batter{% endblock %}
 
 {% block content %}
-  <h1>{{ recipe.title }}</h1>
-  <p>
-    <strong>By:</strong>
-    <a href="{% url 'user_detail' recipe.user.id %}">{{ recipe.user.username }}</a>
-  </p>
+  <div class="row mb-4 align-items-start">
+    <!-- Title & author -->
+    <div class="col-md-8">
+      <h1>{{ recipe.title }}</h1>
+      <p>
+        <strong>By:</strong>
+        <a href="{% url 'user_detail' recipe.user.id %}">{{ recipe.user.username }}</a>
+      </p>
+    </div>
+
+    <!-- Photo -->
+    {% if recipe.photo %}
+      <div class="col-md-4">
+        <img
+          src="{{ recipe.photo.url }}"
+          alt="Photo of {{ recipe.title }}"
+          class="img-fluid rounded recipe-photo"
+        >
+      </div>
+    {% endif %}
+  </div>
 
   <h2>Ingredients</h2>
   <p>{{ recipe.ingredients }}</p>
@@ -19,14 +35,6 @@
   {% if recipe.notes %}
     <h3>Notes</h3>
     <p>{{ recipe.notes }}</p>
-  {% endif %}
-
-  {% if recipe.photo %}
-    <img
-      class="responsive-img"
-      src="{{ recipe.photo.url }}"
-      alt="Photo of {{ recipe.title }}"
-    >
   {% endif %}
 
   <h2>Reviews</h2>
@@ -50,7 +58,7 @@
     {% endfor %}
   </ul>
 
-      <h3>📝 Your Private Note</h3>
+  <h3>📝 Your Private Note</h3>
   {% if user_note %}
     <p>{{ user_note.note }}</p>
     <p>
@@ -77,7 +85,6 @@
       </p>
     {% endif %}
   {% endif %}
-
 
   <h3>📖 Public Notes</h3>
   {% for note in notes %}
