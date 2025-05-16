@@ -4,29 +4,32 @@
 {% block title %}All Recipes – Dainty Batter{% endblock %}
 
 {% block content %}
-  <h1>Recipe List</h1>
-  <ul>
-    {% for recipe in recipes %}
-      <li>
-        <a href="{% url 'recipe_detail' recipe.recipe_id %}">{{ recipe.title }}</a>
-        by <a href="{% url 'user_detail' recipe.user.id %}">{{ recipe.user.username }}</a>
-      </li>
-    {% empty %}
-      <li>No recipes available.</li>
-    {% endfor %}
-  </ul>
+<h1>Recipe List</h1>
+<ul>
+  {% for recipe in recipes %}
+    <li>
+      <a href="{% url 'recipe_detail' recipe.recipe_id %}">
+        <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="150">
+        {{ recipe.title }}
+      </a>
+      by <a href="{% url 'user_detail' recipe.user.id %}">{{ recipe.user.username }}</a>
+    </li>
+  {% empty %}
+    <li>No recipes available.</li>
+  {% endfor %}
+</ul>
 
-  {% if is_paginated %}
-    <div class="pagination">
-      {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}">« Previous</a>
-      {% endif %}
-      <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-      {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">Next »</a>
-      {% endif %}
-    </div>
-  {% endif %}
+{% if is_paginated %}
+  <div class="pagination">
+    {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}">« Previous</a>
+    {% endif %}
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}">Next »</a>
+    {% endif %}
+  </div>
+{% endif %}
 
-  <p><a href="{% url 'home' %}">Back to Home</a></p>
+<p><a href="{% url 'home' %}">Back to Home</a></p>
 {% endblock %}
