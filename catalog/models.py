@@ -93,7 +93,7 @@ class Profile(models.Model):
         return reverse('user_detail', args=[str(self.user.id)])
 
     def __str__(self):
-        return f"{self.user.username}'s Profile"
+        return f"{self.user}'s Profile"
 
 
 class Recipe(models.Model):
@@ -171,4 +171,21 @@ class RecipeNote(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.user_name} - Note on {self.recipe.title}"
+        return f"{self.user} - Note on {self.recipe.title}"
+
+class Post(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, default=uuid.uuid4, editable=False, related_name='posts')
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+class Reply(models.Model):
+    post = models.ForeignKey(Post, related_name='replies', on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Reply to {self.post.title}"
