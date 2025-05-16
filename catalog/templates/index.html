@@ -52,7 +52,8 @@
             {% for category in categories %}
                 <li>
                     <a href="{% url 'category_detail' category.slug %}">
-                        {{ category.name }}
+                        <img src="{{ category.icon.url }}" alt="{{ category.name }}" width="100">
+                        <p>{{ category.name }}</p>
                     </a>
                 </li>
             {% empty %}
