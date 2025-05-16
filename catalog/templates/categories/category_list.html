@@ -1,16 +1,19 @@
 {% extends "base.html" %}
+
 {% block title %}All Categories – Dainty Batter{% endblock %}
+
 {% block content %}
-  <h1>All Categories</h1>
-  <ul>
-    {% for category in categories %}
-      <li>
-        <a href="{% url 'category_detail' category.slug %}">
-          {{ category.name }}
-        </a>
-      </li>
-    {% empty %}
-      <li>No categories yet.</li>
-    {% endfor %}
-  </ul>
+<h1>All Categories</h1>
+<ul>
+  {% for category in categories %}
+    <li>
+      <a href="{% url 'category_detail' category.slug %}">
+        <img src="{{ category.icon.url }}" alt="{{ category.name }}" width="100">
+        {{ category.name }}
+      </a>
+    </li>
+  {% empty %}
+    <li>No categories yet.</li>
+  {% endfor %}
+</ul>
 {% endblock %}
