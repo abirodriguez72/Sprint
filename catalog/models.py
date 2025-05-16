@@ -174,7 +174,7 @@ class RecipeNote(models.Model):
         return f"{self.user} - Note on {self.recipe.title}"
 
 class Post(models.Model):
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, default=uuid.uuid4, editable=False, related_name='posts')
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='catalog_posts', default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=200)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
